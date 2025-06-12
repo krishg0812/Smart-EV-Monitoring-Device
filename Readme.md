@@ -1,118 +1,105 @@
-Great! Here's your **GitHub-friendly README** with **badges**, **sections**, and clear formatting. You can copy and paste this directly into a `README.md` file in your GitHub repository.
+# Smart EV Monitor with ESP32, PZEM-004T, OLED, and ThingsBoard
+
+This project is a **Smart Electric Vehicle (EV) Monitor** system that uses an **ESP32** microcontroller, a **PZEM-004T v3.0** energy meter, and an **OLED display**. It measures real-time power consumption and transmits the data to **ThingsBoard** via MQTT. It also displays data on the OLED and prints a "receipt" to the Serial Monitor.
 
 ---
 
-````markdown
-# ⚡ Smart EV Monitor with ESP32, PZEM-004T, OLED & ThingsBoard
+## 🛠 Hardware Requirements
 
-[![Platform](https://img.shields.io/badge/platform-ESP32-blue.svg)](https://www.espressif.com/en/products/socs/esp32)
-[![Display](https://img.shields.io/badge/display-OLED-ff69b4.svg)](https://learn.adafruit.com/monochrome-oled-breakouts)
-[![ThingsBoard](https://img.shields.io/badge/cloud-ThingsBoard-orange.svg)](https://thingsboard.io)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
-
-A Smart Electric Vehicle (EV) energy monitor built with ESP32 and PZEM-004T that transmits real-time power data to **ThingsBoard** via MQTT and displays data on an **OLED screen**.
+* ESP32 Dev Board
+* PZEM-004T v3.0 Energy Meter
+* Adafruit SSD1306 OLED (128x64, I2C)
+* Wi-Fi Access Point (Wokwi or real device)
+* Jumper wires, breadboard
 
 ---
 
 ## 📦 Features
 
-- 📉 Real-time voltage, current, power monitoring  
-- 🌐 MQTT telemetry to ThingsBoard cloud  
-- 📺 OLED display of live readings  
-- 🧾 Serial "Energy Receipt" every 5 updates  
-- ⚙️ Manual energy calculation for simulated environments (like Wokwi)
+* Live display of voltage, current, and power on OLED
+* Periodic energy data publishing to **ThingsBoard**
+* Simulated energy tracking using calculated power over time
+* "Energy receipt" printout every 5 updates
 
 ---
 
-## 🔧 Hardware Requirements
+## 📡 Pin Configuration
 
-| Component         | Description                        |
-|------------------|------------------------------------|
-| ESP32 Dev Board  | Wi-Fi + Serial capabilities        |
-| PZEM-004T v3.0   | Voltage/Current/Energy sensor      |
-| OLED Display     | SSD1306 128x64 I2C OLED            |
-| Wires + Breadboard | For connections and prototyping  |
-
----
-
-## 🔌 Pin Configuration
-
-| Device  | ESP32 Pin |
-|---------|-----------|
-| PZEM RX | GPIO 16   |
-| PZEM TX | GPIO 17   |
-| OLED SDA | GPIO 21 |
-| OLED SCL | GPIO 22 |
+| Component | ESP32 Pin |
+| --------- | --------- |
+| PZEM TX   | GPIO 17   |
+| PZEM RX   | GPIO 16   |
+| OLED SDA  | GPIO 21   |
+| OLED SCL  | GPIO 22   |
 
 ---
 
-## 🚀 Getting Started
+## 🔌 Configuration
 
-### 1️⃣ Install Arduino IDE
-
-- 📥 Download: https://www.arduino.cc/en/software  
-- 📦 Add ESP32 Board URL:  
-  `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`  
-  - Go to File > Preferences > Paste URL into "Additional Board URLs"
-  - Then Tools > Board > Board Manager > Search and install **ESP32**
-
-### 2️⃣ Install Required Libraries
-
-Install these via **Library Manager** (Sketch > Include Library > Manage Libraries):
-
-- [`PZEM004Tv30`](https://github.com/olehs/PZEM004T-v30)
-- [`Adafruit_SSD1306`](https://github.com/adafruit/Adafruit_SSD1306)
-- [`Adafruit_GFX`](https://github.com/adafruit/Adafruit-GFX-Library)
-- [`PubSubClient`](https://github.com/knolleary/pubsubclient)
-
-### 3️⃣ Configure Your Code
-
-Edit these lines:
+Update these values in the code:
 
 ```cpp
 const char* ssid = "YOUR_WIFI_SSID";
 const char* password = "YOUR_WIFI_PASSWORD";
 const char* access_token = "YOUR_THINGSBOARD_ACCESS_TOKEN";
-````
+```
 
-### 4️⃣ Upload & Monitor
+---
 
-* Select Board: **ESP32 Dev Module**
-* Connect USB and select the correct COM port
+## 📥 Installation Guide
+
+### 1. Set Up Arduino IDE
+
+* Download and install [Arduino IDE](https://www.arduino.cc/en/software)
+* Install the **ESP32 board package**:
+
+  * File > Preferences > Additional Board URLs:
+
+    ```
+    https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+    ```
+  * Tools > Board > Boards Manager > Search "ESP32" > Install
+
+### 2. Install Required Libraries
+
+Use Library Manager (`Sketch > Include Library > Manage Libraries`) to install:
+
+* `PZEM004Tv30`
+* `PubSubClient`
+* `Adafruit_SSD1306`
+* `Adafruit_GFX`
+
+### 3. Upload and Run
+
+* Select board: `ESP32 Dev Module`
+* Connect ESP32 and select the correct COM port
 * Click **Upload**
-* Open **Serial Monitor** at **115200 baud**
+* Open Serial Monitor at `115200` baud
 
 ---
 
-## 📡 Telemetry Format (MQTT)
+## 📊 Telemetry Sent to ThingsBoard
 
-Published to: `v1/devices/me/telemetry`
+The following values are sent every 5 seconds:
 
-```json
-{
-  "voltage": 229.1,
-  "current": 1.55,
-  "power": 355.0,
-  "energy": 8.42
-}
-```
+* `voltage` (V)
+* `current` (A)
+* `power` (W)
+* `energy` (Wh, calculated manually)
 
 ---
 
-## 🖥 OLED Display Output
+## 🖥 OLED Display
 
-```
-Smart EV Monitor
-V: 229.1 V
-I: 1.55 A
-P: 355.0 W
-```
+Live values shown:
+
+* Voltage (V)
+* Current (A)
+* Power (W)
 
 ---
 
-## 🧾 Serial Energy Receipt
-
-Printed every 5 readings (\~25 seconds):
+## 🧾 Sample Energy Receipt (Serial Output)
 
 ```
 === Energy Receipt ===
@@ -126,14 +113,14 @@ Avg Power: 35.67 W
 
 ## 🧠 Notes
 
-* ⚠️ Energy value is **calculated manually** as `Power × Time` to support simulation tools like **Wokwi**
-* Make sure you **create a device on ThingsBoard** and use the matching access token
-* Real PZEM sensors will give `.energy()` values directly
+* PZEM004T address defaults to `0x01`, no need to change unless using multiple sensors.
+* Energy calculation is based on `Power × Time` due to limited simulation support.
+* Ensure ThingsBoard has a device configured with matching access token.
 
 ---
 
-## 📜 License
+## 📎 License
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License.
 
 ---
